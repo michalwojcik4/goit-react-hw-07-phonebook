@@ -1,19 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { useDispatch } from 'react-redux';
+import { setFilter } from 'redux/slices/filterSlices';
+
 import css from './Filter.module.css';
 
-const Filter = ({ value, onChange }) => (
-  <div className={css.search}>
-    <input
-      className={css.search__input}
-      type="text"
-      value={value}
-      onChange={e => onChange(e.target.value)}
-      placeholder="Search contacts..."
-    />
-  </div>
-);
+const Filter = () => {
+  const dispatch = useDispatch();
+
+  const handleFilterChange = e => {
+    dispatch(setFilter(e.target.value));
+  };
+
+  return (
+    <div className={css.search}>
+      <input
+        className={css.search__input}
+        type="text"
+        onChange={e => handleFilterChange(e)}
+        placeholder="Search contacts..."
+      />
+    </div>
+  );
+};
 
 export default Filter;
 
