@@ -43,15 +43,6 @@ const contactsSlice = createSlice({
       .addCase(addContact.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        const checkContact = state.contacts.find(
-          contact => contact.number === action.payload.number
-        );
-        if (checkContact) {
-          Notify.failure(
-            'There is a contact for this number in the phone book'
-          );
-          return;
-        }
         state.contacts.push(action.payload);
         Notify.success('Great! Contact has been added');
       })

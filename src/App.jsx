@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectFilteredContacts, selectIsLoading } from 'redux/selectors';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+import {
+  selectFilteredContacts,
+  selectIsLoading,
+  selectContacts,
+} from 'redux/selectors';
 import { deleteContact, fetchContacts, addContact } from 'redux/operations';
 
 import ContactForm from './components/ContactForm/ContactForm';
@@ -13,6 +19,7 @@ import css from './App.module.css';
 
 export const App = () => {
   const { isLoading } = useSelector(selectIsLoading);
+  const allContacts = useSelector(selectContacts);
   const filteredContacts = useSelector(selectFilteredContacts);
   const dispatch = useDispatch();
 
@@ -21,6 +28,14 @@ export const App = () => {
   }, [dispatch]);
 
   const handleAddContact = newContact => {
+    const checkContact = allContacts.filter(contact =>
+      contact.number.toLowerCase().includes(newContact.number.toLowerCase())
+    );
+
+    if (checkContact.length > 0) {
+      Notify.failure('There is a contact for this number in the phone book');
+      return;
+    }
     dispatch(addContact(newContact));
   };
 
